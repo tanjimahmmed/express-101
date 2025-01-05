@@ -14,10 +14,18 @@ const mockUsers = [
     {id: 1, username: "collin", displayName: "Collin"},
     {id: 2, username: "jimmy", displayName: "Jimmy"},
     {id: 3, username: "hope", displayName: "Hope"},
+    {id: 4, username: "joe", displayName: "Joe"},
+    {id: 5, username: "jane", displayName: "Jane"},
+    {id: 6, username: "jake", displayName: "Jake"},
+    {id: 7, username: "jill", displayName: "Jill"},
 ]
 
 app.get("/api/users", (req, res) => {
-    res.send(mockUsers)
+    console.log(req.query)
+    const {query: {filter, value}} = req
+    // when filter and value are undefined
+    if(filter && value) return res.send(mockUsers.filter((user) => user[filter].includes(value)))
+    return res.send(mockUsers)
 })
 
 // Route params
@@ -48,4 +56,9 @@ app.get("/api/products", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 })
+
+// query params
+// example - localhost:3000/api/users?name=collin
+// example - localhost:3000/products?key=value&key2=value2
+
 
