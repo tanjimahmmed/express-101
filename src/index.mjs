@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 
 const app = express();
 
@@ -61,6 +61,19 @@ app.get("/api/products", (req, res) => {
         {id: 123, name: "chicken sandwich", price: 5.99},
         {id: 124, name: "ham sandwich", price: 8.99}
     ])
+})
+
+app.put("/api/users/:id", (req, res) => {
+    const {body, params:{id}} = req
+
+    const parsedId = parseInt(id)
+    if(isNaN(parsedId)) return response.sendStatus(400)
+
+    const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId)
+
+    if(findUserIndex === -1) return response.sendStatus(404)
+    mockUsers[findUserIndex] = {id: parsedId, ...body}
+    return res.sendStatus(200)
 })
 
 app.listen(PORT, () => {
