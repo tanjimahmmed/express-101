@@ -2,6 +2,8 @@ import express from "express";
 
 const app = express();
 
+app.use(express.json())
+
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
@@ -26,6 +28,14 @@ app.get("/api/users", (req, res) => {
     // when filter and value are undefined
     if(filter && value) return res.send(mockUsers.filter((user) => user[filter].includes(value)))
     return res.send(mockUsers)
+})
+
+// post req
+app.post("/api/users", (req, res) => {
+    const {body} = req
+    const newUser = {id: mockUsers[mockUsers.length - 1].id + 1, ...body}
+    mockUsers.push(newUser)
+    return res.status(201).send(newUser)
 })
 
 // Route params
